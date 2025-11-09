@@ -1,0 +1,258 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saldo a Pagar - Regional 7ma 2025</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .important {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .player-selector {
+            margin: 25px 0;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .details {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            display: none;
+        }
+        .balance {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #fff5f5;
+            border-radius: 8px;
+        }
+        .pdf-note {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        .whatsapp-button {
+            display: block;
+            width: 80%;
+            margin: 30px auto;
+            padding: 15px;
+            background-color: #25D366;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .whatsapp-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        .whatsapp-button img {
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .payment-info {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+        }
+        .payment-info h3 {
+            color: #1976d2;
+            margin-top: 0;
+        }
+        .footer-warning {
+            background-color: #ffebee;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #f44336;
+            font-weight: bold;
+        }
+        .footer-note {
+            margin-top: 30px;
+            font-style: italic;
+            text-align: center;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Regional 7ma 2025 - Saldo a Pagar</h1>
+        
+        <div class="important">
+            <h2>Hola Familias</h2>
+            <p><strong>INFORMACION MUY IMPORTANTE</strong></p>
+            <p>CONOCE TU SALDO A PAGAR EN EL SIGUIENTE LINK</p>
+            <p><a href="https://drive.google.com/file/d/19sENPo-ovEwSzRM09-6oCm3fJg5lli6a/view?usp=sharing" target="_blank">https://drive.google.com/file/d/19sENPo-ovEwSzRM09-6oCm3fJg5lli6a/view?usp=sharing</a></p>
+        </div>
+        
+        <div class="player-selector">
+            <label for="playerSelect"><strong>Selecciona una jugadora para ver su saldo:</strong></label>
+            <select id="playerSelect">
+                <option value="">-- Selecciona una jugadora --</option>
+                <option value="ALLENDE MARTINA">ALLENDE MARTINA</option>
+                <option value="AMAVET LOURDES">AMAVET LOURDES</option>
+                <option value="BOBADILLA BAZAN VALENTINA">BOBADILLA BAZAN VALENTINA</option>
+                <option value="CANEPA ZAPATA LUNA">CANEPA ZAPATA LUNA</option>
+                <option value="CITTADINI PIERINA">CITTADINI PIERINA</option>
+                <option value="CREMONINI ISABEL">CREMONINI ISABEL</option>
+                <option value="D'AMATO FITZ GERALD FELICITAS">D'AMATO FITZ GERALD FELICITAS</option>
+                <option value="DARMANDRAIL CLARA">DARMANDRAIL CLARA</option>
+                <option value="DENHOLM DIAZ ALMA">DENHOLM DIAZ ALMA</option>
+                <option value="DIAZ CAMILA">DIAZ CAMILA</option>
+                <option value="FEDUZI VALENTINA">FEDUZI VALENTINA</option>
+                <option value="FERRARIO ISABELLA">FERRARIO ISABELLA</option>
+                <option value="FIORE ABRIATA CATALINA">FIORE ABRIATA CATALINA</option>
+                <option value="GUTIERREZ KAIA">GUTIERREZ KAIA</option>
+                <option value="MAGADAN MALVASIO INES">MAGADAN MALVASIO INES</option>
+                <option value="MAIDANA LUCIA">MAIDANA LUCIA</option>
+                <option value="MARABINI JOAQUINA">MARABINI JOAQUINA</option>
+                <option value="MARQUES FONTS TRINIDAD">MARQUES FONTS TRINIDAD</option>
+                <option value="MARTIN VELA HELENA">MARTIN VELA HELENA</option>
+                <option value="MORDINI JUANA">MORDINI JUANA</option>
+                <option value="NAVARRO TEJERINA PILAR">NAVARRO TEJERINA PILAR</option>
+                <option value="PADOANI EGAN ISABELLA">PADOANI EGAN ISABELLA</option>
+                <option value="PERUCCA EMMA">PERUCCA EMMA</option>
+                <option value="SUAREZ COPPOLA MAIA">SUAREZ COPPOLA MAIA</option>
+                <option value="TIRINATO BIANCA">TIRINATO BIANCA</option>
+                <option value="URQUIJO JUANA">URQUIJO JUANA</option>
+                <option value="ZAPIOLA GUADALUPE">ZAPIOLA GUADALUPE</option>
+            </select>
+        </div>
+        
+        <div id="playerDetails" class="details">
+            <h2 id="playerName"></h2>
+            <div class="balance">Saldo a Pagar: <span id="playerBalance"></span></div>
+            
+            <div class="pdf-note">
+                <p>Los valores mostrados son EXACTAMENTE los mismos que figuran en el documento oficial PDF.</p>
+                <p>Para ver el desglose completo y todos los detalles, consulte el PDF en el link de arriba.</p>
+            </div>
+        </div>
+        
+        <a href="https://wa.link/v21mwg" target="_blank" class="whatsapp-button">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"> Informe el pago aquí (Laura Mordini)
+        </a>
+        
+        <div class="payment-info">
+            <h3>Información de Pago</h3>
+            <p><strong>TRANSFERIR A MERCADO PAGO HASTA EL JUEVES 13/11/2025</strong></p>
+            <p><strong>ALIAS:</strong> regionalseptima25.tc</p>
+            <p><strong>CVU:</strong> 0000003100048566228849 (Laura Beatriz Philipp)</p>
+            <p><strong>REGIONAL:</strong> 26/11 – 30/11/2025</p>
+            
+            <h3>Detalles importantes:</h3>
+            <p>Los saldos mostrados son los mismos que figuran en el documento oficial. No se han realizado cálculos adicionales.</p>
+            
+            <p>Es nuestra intención poder cancelar la inscripción al torneo y el hotel la semana próxima. Les pedimos por favor puedan cancelar el saldo HASTA EL JUEVES 13/11/2025 y enviar el comprobante a Laura para cotejarlo y descontarlo de cada jugadora.</p>
+            
+            <p><strong>Nota 1:</strong> cualquier duda sobre pagos/imputaciones enviar mensaje por privado</p>
+            
+            <p><strong>MUCHAS GRACIAS</strong></p>
+        </div>
+        
+        <div class="footer-warning">
+            ADVERTENCIA: Los saldos mostrados en esta página son EXACTAMENTE los mismos que figuran en el documento PDF oficial. No se han modificado ni recalculado.
+        </div>
+        
+        <div class="footer-note">
+            <p>Esta información se proporciona exclusivamente con los datos del documento oficial.</p>
+        </div>
+    </div>
+
+    <script>
+        // Datos de cada jugadora con sus saldos EXACTAMENTE como aparecen en el PDF
+        const playersData = {
+            "ALLENDE MARTINA": "$196.015,33",
+            "AMAVET LOURDES": "$320.032,00",
+            "BOBADILLA BAZAN VALENTINA": "$136.015,33",
+            "CANEPA ZAPATA LUNA": "$51.935,33",
+            "CITTADINI PIERINA": "($100.000,00)",
+            "CREMONINI ISABEL": "$231.015,33",
+            "D'AMATO FITZ GERALD FELICITAS": "$196.015,33",
+            "DARMANDRAIL CLARA": "$368.032,00",
+            "DENHOLM DIAZ ALMA": "$166.015,33",
+            "DIAZ CAMILA": "$196.015,33",
+            "FEDUZI VALENTINA": "$196.015,33",
+            "FERRARIO ISABELLA": "$194.015,33",
+            "FIORE ABRIATA CATALINA": "$111.935,33",
+            "GUTIERREZ KAIA": "$196.015,33",
+            "MAGADAN MALVASIO INES": "($60.000,00)",
+            "MAIDANA LUCIA": "$196.015,33",
+            "MARABINI JOAQUINA": "$196.015,33",
+            "MARQUES FONTS TRINIDAD": "$107.935,33",
+            "MARTIN VELA HELENA": "($40.000,00)",
+            "MORDINI JUANA": "$136.015,33",
+            "NAVARRO TEJERINA PILAR": "$136.015,33",
+            "PADOANI EGAN ISABELLA": "$166.015,33",
+            "PERUCCA EMMA": "$196.015,33",
+            "SUAREZ COPPOLA MAIA": "$196.015,33",
+            "TIRINATO BIANCA": "$16.015,33",
+            "URQUIJO JUANA": "$111.935,33",
+            "ZAPIOLA GUADALUPE": "$420.032,00"
+        };
+
+        document.getElementById('playerSelect').addEventListener('change', function() {
+            const playerName = this.value;
+            const detailsContainer = document.getElementById('playerDetails');
+            const nameElement = document.getElementById('playerName');
+            const balanceElement = document.getElementById('playerBalance');
+            
+            if (playerName && playersData[playerName]) {
+                nameElement.textContent = playerName;
+                balanceElement.textContent = playersData[playerName];
+                detailsContainer.style.display = 'block';
+            } else {
+                detailsContainer.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
+```
