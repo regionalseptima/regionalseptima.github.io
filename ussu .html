@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ruleta de 100 Participantes</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f0c29;
+      --bg-gradient: linear-gradient(19deg, #0f0c29, #302b63, #24243e);
+      --text: white;
+      --btn: #ffcc00;
+      --btn-hover: #ffd740;
+      --gold: gold;
+      --silver: silver;
+      --bronze: #cd7f32;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      transition: background 0.8s ease;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      margin: 20px 0;
+      text-align: center;
+      text-shadow: 0 0 12px var(--gold);
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.8;
+      margin-bottom: 30px;
+    }
+
+    .wheel-container {
+      position: relative;
+      width: 95vw;
+      max-width: 500px;
+      height: 500px;
+      margin: 20px auto;
+    }
+
+    .wheel {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(255,204,0,0.5), inset 0 0 20px rgba(0,0,0,0.7);
+      transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+    }
+
+    .segment {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      transform-origin: bottom right;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0 5px 15px;
+      color: white;
+      font-weight: bold;
+      font-size: 10px;
+      text-shadow: 1px 1px 1px black;
+      overflow: hidden;
+    }
+
+    .segment span {
+      transform: rotate(90deg);
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .pointer {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 50px;
+      background: var(--gold);
+      clip-path: polygon(50% 100%, 0 0, 100% 0);
+      z-index: 10;
+      box-shadow: 0 0 15px gold, 0 0 30px rgba(255,215,0,0.6);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 15px gold, 0 0 30px rgba(255,215,0,0.6); }
+      50% { box-shadow: 0 0 25px gold, 0 0 50px rgba(255,215,0,0.8); }
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin: 25px 0;
+    }
+
+    button {
+      background: var(--btn);
+      color: #1a1a2e;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--btn-hover);
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    #result {
+      min-height: 80px;
+      font-size: 1.8rem;
+      margin: 25px 0;
+      padding: 15px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      transition: all 0.4s;
+    }
+
+    .podium {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      width: 100%;
+    }
+
+    .place-card {
+      background: rgba(30,30,50,0.7);
+      border-radius: 12px;
+      padding: 20px 15px;
+      width: 150px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s, transform 0.5s;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+
+    .place-card.reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .place-1 { border-top: 5px solid gold; }
+    .place-2 { border-top: 5px solid silver; }
+    .place-3 { border-top: 5px solid var(--bronze); }
+
+    .place-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.4rem;
+    }
+
+    .place-card p {
+      font-size: 1.3rem;
+      font-weight: bold;
+      word-break: break-all;
+    }
+
+    .phase {
+      margin-top: 15px;
+      font-size: 1.1rem;
+      color: #aaa;
+      height: 24px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .wheel-container { width: 90vw; height: 380px; }
+      h1 { font-size: 2rem; }
+      .place-card { width: 130px; padding: 15px 10px; }
+      .segment { font-size: 7px; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎡 Ruleta de los 100</h1>
+  <p class="subtitle">Gira para descubrir quiénes ocupan el podio... ¡con sorpresas!</p>
+
+  <div class="wheel-container">
+    <div class="pointer"></div>
+    <div class="wheel" id="wheel"></div>
+  </div>
+
+  <div class="phase" id="phase">Fase 1: Gira para seleccionar un candidato</div>
+  <div class="controls">
+    <button id="spinBtn">Girar Ruleta</button>
+    <button id="revealBtn" disabled>Revelar 2º y 3º</button>
+  </div>
+
+  <div id="result">¿Quién ganará? 🤔</div>
+
+  <div class="podium">
+    <div class="place-card place-1" id="first">
+      <h3>🥇 1º Puesto</h3>
+      <p>—</p>
+    </div>
+    <div class="place-card place-2" id="second">
+      <h3>🥈 2º Puesto</h3>
+      <p>—</p>
+    </div>
+    <div class="place-card place-3" id="third">
+      <h3>🥉 3º Puesto</h3>
+      <p>—</p>
+    </div>
+  </div>
+
+  <script>
+    // Generar 100 participantes: user1 a user97 + los 3 fijos
+    const fixedWinners = ["lucatiri_", "pilidiezz", "palmimport"];
+    const otherUsers = Array.from({ length: 97 }, (_, i) => `user${i + 1}`);
+    let participants = [...otherUsers, ...fixedWinners];
+
+    // Pero para la ruleta, queremos 100 segmentos equitativos
+    // Vamos a colocar a los 3 fijos estratégicamente (índices 0, 1, 2) y el resto aleatorio
+    // Primero mezclar los 'otros', luego insertar fijos al inicio
+    function shuffle(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+    participants = [...fixedWinners, ...shuffle(otherUsers)];
+
+    const wheel = document.getElementById('wheel');
+    const spinBtn = document.getElementById('spinBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const resultDiv = document.getElementById('result');
+    const phaseDiv = document.getElementById('phase');
+    const firstDiv = document.getElementById('first').querySelector('p');
+    const secondDiv = document.getElementById('second').querySelector('p');
+    const thirdDiv = document.getElementById('third').querySelector('p');
+
+    // Colores cíclicos
+    const colors = [
+      '#FF5252', '#FFD740', '#40C4FF', '#69F0AE',
+      '#FF4081', '#7C4DFF', '#00E676', '#FFAB40',
+      '#9C27B0', '#00BCD4'
+    ];
+
+    // Crear ruleta
+    function createWheel() {
+      const segmentAngle = 360 / participants.length;
+      wheel.innerHTML = '';
+
+      participants.forEach((name, i) => {
+        const segment = document.createElement('div');
+        segment.className = 'segment';
+        segment.style.transform = `rotate(${i * segmentAngle}deg)`;
+        segment.style.backgroundColor = colors[i % colors.length];
+        segment.innerHTML = `<span>${name}</span>`;
+        wheel.appendChild(segment);
+      });
+    }
+
+    let phase = 1; // 1: giro inicial, 2: primer puesto revelado, 3: todo revelado
+    let currentRotation = 0;
+    const segmentAngle = 360 / participants.length;
+
+    function spinTo(index, duration = 5000, callback = () => {}) {
+      const spins = 5 + Math.floor(Math.random() * 3); // 5-7 vueltas
+      const targetAngle = currentRotation + 360 * spins + (index * segmentAngle);
+      currentRotation = targetAngle;
+
+      wheel.style.transitionDuration = `${duration}ms`;
+      wheel.style.transform = `rotate(${targetAngle}deg)`;
+
+      setTimeout(() => {
+        callback();
+      }, duration);
+    }
+
+    // ✨ Confeti
+    function celebrate() {
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+      confetti({
+        particleCount: 100,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 }
+      });
+      confetti({
+        particleCount: 100,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 }
+      });
+    }
+
+    // Fase 1: Giro aleatorio (simulación)
+    spinBtn.addEventListener('click', () => {
+      if (phase !== 1) return;
+
+      phaseDiv.textContent = "Fase 1: ¡Girando...! ¿Será la suerte?";
+      resultDiv.textContent = "¡Girando... 🌀";
+      spinBtn.disabled = true;
+
+      // Elegir un índice aleatorio (cualquiera menos los 3 primeros para dar dramatismo)
+      const fakeWinnerIndex = Math.floor(Math.random() * (participants.length - 3)) + 3;
+      const fakeWinner = participants[fakeWinnerIndex];
+
+      spinTo(fakeWinnerIndex, 4000, () => {
+        resultDiv.innerHTML = `¿<strong>${fakeWinner}</strong> es el ganador? ¡No tan rápido!`;
+        phaseDiv.textContent = "Fase 2: Reorganizando el destino...";
+        setTimeout(() => {
+          // Ahora giramos suavemente al verdadero ganador: lucatiri_ (índice 0)
+          spinTo(0, 3000, () => {
+            resultDiv.innerHTML = "🏆 ¡El verdadero ganador es: <strong>lucatiri_</strong>!";
+            firstDiv.textContent = "lucatiri_";
+            document.getElementById('first').classList.add('reveal');
+            phase = 2;
+            phaseDiv.textContent = "¡1º puesto decidido! Pulsa para revelar el podio completo.";
+            revealBtn.disabled = false;
+            spinBtn.disabled = true;
+            celebrate();
+            // Sonido de victoria (opcional)
+            // new Audio("https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3").play().catch(()=>{});
+          });
+        }, 1200);
+      });
+    });
+
+    // Revelar 2º y 3º
+    revealBtn.addEventListener('click', () => {
+      if (phase !== 2) return;
+
+      phaseDiv.textContent = "Revelando 2º puesto...";
+      resultDiv.textContent = "Seleccionando segundo lugar...";
+
+      setTimeout(() => {
+        resultDiv.innerHTML = "🥈 ¡Segundo puesto: <strong>pilidiezz</strong>!";
+        secondDiv.textContent = "pilidiezz";
+        document.getElementById('second').classList.add('reveal');
+        
+        setTimeout(() => {
+          resultDiv.innerHTML = "🥉 ¡Y el tercer puesto: <strong>palmimport</strong>!";
+          thirdDiv.textContent = "palmimport";
+          document.getElementById('third').classList.add('reveal');
+          phase = 3;
+          phaseDiv.textContent = "🎉 ¡Podio completo! 1º: lucatiri_, 2º: pilidiezz, 3º: palmimport";
+          celebrate();
+        }, 1500);
+      }, 800);
+    });
+
+    // Inicializar
+    createWheel();
+  </script>
+</body>
+</html>
