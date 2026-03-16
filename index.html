@@ -1,258 +1,786 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saldo a Pagar - Regional 7ma 2025</title>
+    <title>Calendario Escolar 3RO A - 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-            color: #333;
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Print Styles */
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; color: black; }
+            .calendar-container { box-shadow: none; border: none; }
+            .page-break { page-break-after: always; }
+            
+            /* Force colors for print */
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+        .print-only { display: none; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .event-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+        
+        .subject-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .important {
-            background-color: #fff8e1;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        .player-selector {
-            margin: 25px 0;
-        }
-        select {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #3498db;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        .details {
-            margin-top: 25px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            display: none;
-        }
-        .balance {
-            font-size: 24px;
-            font-weight: bold;
-            color: #e74c3c;
-            text-align: center;
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #fff5f5;
-            border-radius: 8px;
-        }
-        .pdf-note {
-            background-color: #e3f2fd;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            text-align: center;
-            font-weight: bold;
-        }
-        .whatsapp-button {
-            display: block;
-            width: 80%;
-            margin: 30px auto;
-            padding: 15px;
-            background-color: #25D366;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
-        }
-        .whatsapp-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-        }
-        .whatsapp-button img {
-            width: 24px;
-            height: 24px;
-            vertical-align: middle;
-            margin-right: 10px;
-        }
-        .payment-info {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #e3f2fd;
-            border-radius: 8px;
-        }
-        .payment-info h3 {
-            color: #1976d2;
-            margin-top: 0;
-        }
-        .footer-warning {
-            background-color: #ffebee;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border-left: 4px solid #f44336;
-            font-weight: bold;
-        }
-        .footer-note {
-            margin-top: 30px;
-            font-style: italic;
-            text-align: center;
-            color: #7f8c8d;
-        }
+
+        /* Modal Transition */
+        .modal { transition: opacity 0.25s ease; }
+        body.modal-active { overflow: hidden; }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Regional 7ma 2025 - Saldo a Pagar</h1>
-        
-        <div class="important">
-            <h2>Hola Familias</h2>
-            <p><strong>INFORMACION MUY IMPORTANTE</strong></p>
-            <p>CONOCE TU SALDO A PAGAR EN EL SIGUIENTE LINK</p>
-            <p><a href="https://drive.google.com/file/d/19sENPo-ovEwSzRM09-6oCm3fJg5lli6a/view?usp=sharing" target="_blank">https://drive.google.com/file/d/19sENPo-ovEwSzRM09-6oCm3fJg5lli6a/view?usp=sharing</a></p>
+<body class="bg-slate-50 text-slate-800 h-screen flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shadow-sm z-10 no-print">
+        <div>
+            <h1 class="text-xl font-bold text-slate-900">Colegio Fasta San Vicente de Paúl</h1>
+            <p class="text-sm text-slate-500">3RO A | Año 2026</p>
         </div>
-        
-        <div class="player-selector">
-            <label for="playerSelect"><strong>Selecciona una jugadora para ver su saldo:</strong></label>
-            <select id="playerSelect">
-                <option value="">-- Selecciona una jugadora --</option>
-                <option value="ALLENDE MARTINA">ALLENDE MARTINA</option>
-                <option value="AMAVET LOURDES">AMAVET LOURDES</option>
-                <option value="BOBADILLA BAZAN VALENTINA">BOBADILLA BAZAN VALENTINA</option>
-                <option value="CANEPA ZAPATA LUNA">CANEPA ZAPATA LUNA</option>
-                <option value="CITTADINI PIERINA">CITTADINI PIERINA</option>
-                <option value="CREMONINI ISABEL">CREMONINI ISABEL</option>
-                <option value="D'AMATO FITZ GERALD FELICITAS">D'AMATO FITZ GERALD FELICITAS</option>
-                <option value="DARMANDRAIL CLARA">DARMANDRAIL CLARA</option>
-                <option value="DENHOLM DIAZ ALMA">DENHOLM DIAZ ALMA</option>
-                <option value="DIAZ CAMILA">DIAZ CAMILA</option>
-                <option value="FEDUZI VALENTINA">FEDUZI VALENTINA</option>
-                <option value="FERRARIO ISABELLA">FERRARIO ISABELLA</option>
-                <option value="FIORE ABRIATA CATALINA">FIORE ABRIATA CATALINA</option>
-                <option value="GUTIERREZ KAIA">GUTIERREZ KAIA</option>
-                <option value="MAGADAN MALVASIO INES">MAGADAN MALVASIO INES</option>
-                <option value="MAIDANA LUCIA">MAIDANA LUCIA</option>
-                <option value="MARABINI JOAQUINA">MARABINI JOAQUINA</option>
-                <option value="MARQUES FONTS TRINIDAD">MARQUES FONTS TRINIDAD</option>
-                <option value="MARTIN VELA HELENA">MARTIN VELA HELENA</option>
-                <option value="MORDINI JUANA">MORDINI JUANA</option>
-                <option value="NAVARRO TEJERINA PILAR">NAVARRO TEJERINA PILAR</option>
-                <option value="PADOANI EGAN ISABELLA">PADOANI EGAN ISABELLA</option>
-                <option value="PERUCCA EMMA">PERUCCA EMMA</option>
-                <option value="SUAREZ COPPOLA MAIA">SUAREZ COPPOLA MAIA</option>
-                <option value="TIRINATO BIANCA">TIRINATO BIANCA</option>
-                <option value="URQUIJO JUANA">URQUIJO JUANA</option>
-                <option value="ZAPIOLA GUADALUPE">ZAPIOLA GUADALUPE</option>
-            </select>
-        </div>
-        
-        <div id="playerDetails" class="details">
-            <h2 id="playerName"></h2>
-            <div class="balance">Saldo a Pagar: <span id="playerBalance"></span></div>
-            
-            <div class="pdf-note">
-                <p>Los valores mostrados son EXACTAMENTE los mismos que figuran en el documento oficial PDF.</p>
-                <p>Para ver el desglose completo y todos los detalles, consulte el PDF en el link de arriba.</p>
+        <div class="flex items-center space-x-4">
+            <div class="flex bg-slate-100 rounded-lg p-1">
+                <button onclick="switchView('day')" id="btn-day" class="px-3 py-1.5 text-sm font-medium rounded-md transition-all">Día</button>
+                <button onclick="switchView('week')" id="btn-week" class="px-3 py-1.5 text-sm font-medium rounded-md transition-all">Semana</button>
+                <button onclick="switchView('month')" id="btn-month" class="px-3 py-1.5 text-sm font-medium rounded-md transition-all bg-white shadow text-indigo-600">Mes</button>
+                <button onclick="switchView('list')" id="btn-list" class="px-3 py-1.5 text-sm font-medium rounded-md transition-all">Lista</button>
             </div>
+            <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors flex items-center gap-2">
+                <i class="fa-solid fa-plus"></i> Nueva Actividad
+            </button>
         </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex flex-1 overflow-hidden">
         
-        <a href="https://wa.link/v21mwg" target="_blank" class="whatsapp-button">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"> Informe el pago aquí (Laura Mordini)
-        </a>
+        <!-- Sidebar Filters -->
+        <aside class="w-64 bg-white border-r border-slate-200 flex flex-col overflow-y-auto no-print">
+            <div class="p-4 border-b border-slate-100">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Filtrar por Materia</h3>
+                <div class="space-y-2" id="subject-filters">
+                    <!-- Injected via JS -->
+                </div>
+                <button onclick="resetFilters()" class="mt-4 text-xs text-indigo-600 hover:underline w-full text-left">Mostrar todas</button>
+            </div>
+            
+            <div class="p-4">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Leyenda</h3>
+                <div class="space-y-3 text-sm">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-100 border border-red-300"></div>
+                        <span>Prueba (Oral/Escrita)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-blue-100 border border-blue-300"></div>
+                        <span>Trabajo Práctico</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-amber-100 border border-amber-300"></div>
+                        <span>Obligación</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Calendar Area -->
+        <main class="flex-1 overflow-y-auto bg-slate-50 p-6 relative" id="calendar-main">
+            <!-- Calendar Header Controls -->
+            <div class="flex justify-between items-center mb-6 no-print">
+                <div class="flex items-center gap-4">
+                    <button onclick="changeDate(-1)" class="p-2 hover:bg-white rounded-full shadow-sm border border-transparent hover:border-slate-200 transition-all"><i class="fa-solid fa-chevron-left"></i></button>
+                    <h2 id="current-date-display" class="text-2xl font-bold text-slate-800 min-w-[200px] text-center">Enero 2026</h2>
+                    <button onclick="changeDate(1)" class="p-2 hover:bg-white rounded-full shadow-sm border border-transparent hover:border-slate-200 transition-all"><i class="fa-solid fa-chevron-right"></i></button>
+                    <button onclick="goToToday()" class="text-sm text-indigo-600 font-medium hover:underline ml-2">Hoy</button>
+                </div>
+                <button onclick="window.print()" class="text-slate-500 hover:text-slate-800 transition-colors" title="Imprimir">
+                    <i class="fa-solid fa-print text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Dynamic Content Container -->
+            <div id="calendar-content" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden min-h-[600px]">
+                <!-- Content injected via JS -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div id="event-modal" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-50">
+        <div class="modal-overlay absolute w-full h-full bg-slate-900 opacity-50" onclick="closeModal()"></div>
         
-        <div class="payment-info">
-            <h3>Información de Pago</h3>
-            <p><strong>TRANSFERIR A MERCADO PAGO HASTA EL JUEVES 13/11/2025</strong></p>
-            <p><strong>ALIAS:</strong> regionalseptima25.tc</p>
-            <p><strong>CVU:</strong> 0000003100048566228849 (Laura Beatriz Philipp)</p>
-            <p><strong>REGIONAL:</strong> 26/11 – 30/11/2025</p>
+        <div class="modal-container bg-white w-full max-w-lg rounded-xl shadow-2xl z-50 overflow-y-auto max-h-[90vh]">
             
-            <h3>Detalles importantes:</h3>
-            <p>Los saldos mostrados son los mismos que figuran en el documento oficial. No se han realizado cálculos adicionales.</p>
-            
-            <p>Es nuestra intención poder cancelar la inscripción al torneo y el hotel la semana próxima. Les pedimos por favor puedan cancelar el saldo HASTA EL JUEVES 13/11/2025 y enviar el comprobante a Laura para cotejarlo y descontarlo de cada jugadora.</p>
-            
-            <p><strong>Nota 1:</strong> cualquier duda sobre pagos/imputaciones enviar mensaje por privado</p>
-            
-            <p><strong>MUCHAS GRACIAS</strong></p>
-        </div>
-        
-        <div class="footer-warning">
-            ADVERTENCIA: Los saldos mostrados en esta página son EXACTAMENTE los mismos que figuran en el documento PDF oficial. No se han modificado ni recalculado.
-        </div>
-        
-        <div class="footer-note">
-            <p>Esta información se proporciona exclusivamente con los datos del documento oficial.</p>
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-6 border-b border-slate-100">
+                <h3 class="text-xl font-bold text-slate-800">Agregar Actividad</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times text-xl"></i></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-4">
+                <form id="event-form" onsubmit="handleFormSubmit(event)">
+                    <input type="hidden" id="event-date">
+                    
+                    <!-- Type Selection -->
+                    <div class="grid grid-cols-3 gap-3 mb-4">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="type" value="prueba" class="peer sr-only" checked onchange="toggleModality(true)">
+                            <div class="p-3 text-center border rounded-lg peer-checked:bg-red-50 peer-checked:border-red-500 peer-checked:text-red-700 transition-all hover:bg-slate-50">
+                                <i class="fa-solid fa-pen-to-square mb-1 block"></i>
+                                <span class="text-xs font-bold">Prueba</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="type" value="tp" class="peer sr-only" onchange="toggleModality(false)">
+                            <div class="p-3 text-center border rounded-lg peer-checked:bg-blue-50 peer-checked:border-blue-500 peer-checked:text-blue-700 transition-all hover:bg-slate-50">
+                                <i class="fa-solid fa-book-open mb-1 block"></i>
+                                <span class="text-xs font-bold">Trabajo Práctico</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="type" value="obligacion" class="peer sr-only" onchange="toggleModality(false)">
+                            <div class="p-3 text-center border rounded-lg peer-checked:bg-amber-50 peer-checked:border-amber-500 peer-checked:text-amber-700 transition-all hover:bg-slate-50">
+                                <i class="fa-solid fa-clipboard-check mb-1 block"></i>
+                                <span class="text-xs font-bold">Obligación</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Title -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Título</label>
+                        <input type="text" id="event-title" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all" placeholder="Ej: Examen Parcial">
+                    </div>
+
+                    <!-- Subject & Time -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Asignatura</label>
+                            <select id="event-subject" required onchange="updateTimeSlots()" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                                <option value="">Seleccionar...</option>
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Horario de Clase</label>
+                            <select id="event-time" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                                <option value="">Primero seleccione materia</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Modality (Only for Pruebas) -->
+                    <div id="modality-group">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Modalidad</label>
+                        <div class="flex gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="modality" value="escrita" checked class="text-indigo-600 focus:ring-indigo-500">
+                                <span class="text-sm">Escrita</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="modality" value="oral" class="text-indigo-600 focus:ring-indigo-500">
+                                <span class="text-sm">Oral</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Topics -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Temas a Estudiar / Detalle</label>
+                        <textarea id="event-topics" rows="3" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all" placeholder="Unidad 1, 2 y 3..."></textarea>
+                    </div>
+
+                    <!-- File Attachment (Simulated) -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Adjuntar Archivo</label>
+                        <div class="flex items-center justify-center w-full">
+                            <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <i class="fa-solid fa-cloud-arrow-up text-slate-400 mb-2"></i>
+                                    <p class="text-xs text-slate-500"><span class="font-semibold">Click para subir</span> o arrastrar</p>
+                                </div>
+                                <input type="file" class="hidden" id="event-file" />
+                            </label>
+                        </div>
+                        <p id="file-name-display" class="text-xs text-green-600 mt-1 hidden"></p>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="pt-4 flex justify-end gap-3">
+                        <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50">Cancelar</button>
+                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 shadow-sm">Guardar Actividad</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
     <script>
-        // Datos de cada jugadora con sus saldos EXACTAMENTE como aparecen en el PDF
-        const playersData = {
-            "ALLENDE MARTINA": "$196.015,33",
-            "AMAVET LOURDES": "$320.032,00",
-            "BOBADILLA BAZAN VALENTINA": "$136.015,33",
-            "CANEPA ZAPATA LUNA": "$51.935,33",
-            "CITTADINI PIERINA": "($100.000,00)",
-            "CREMONINI ISABEL": "$231.015,33",
-            "D'AMATO FITZ GERALD FELICITAS": "$196.015,33",
-            "DARMANDRAIL CLARA": "$368.032,00",
-            "DENHOLM DIAZ ALMA": "$166.015,33",
-            "DIAZ CAMILA": "$196.015,33",
-            "FEDUZI VALENTINA": "$196.015,33",
-            "FERRARIO ISABELLA": "$194.015,33",
-            "FIORE ABRIATA CATALINA": "$111.935,33",
-            "GUTIERREZ KAIA": "$196.015,33",
-            "MAGADAN MALVASIO INES": "($60.000,00)",
-            "MAIDANA LUCIA": "$196.015,33",
-            "MARABINI JOAQUINA": "$196.015,33",
-            "MARQUES FONTS TRINIDAD": "$107.935,33",
-            "MARTIN VELA HELENA": "($40.000,00)",
-            "MORDINI JUANA": "$136.015,33",
-            "NAVARRO TEJERINA PILAR": "$136.015,33",
-            "PADOANI EGAN ISABELLA": "$166.015,33",
-            "PERUCCA EMMA": "$196.015,33",
-            "SUAREZ COPPOLA MAIA": "$196.015,33",
-            "TIRINATO BIANCA": "$16.015,33",
-            "URQUIJO JUANA": "$111.935,33",
-            "ZAPIOLA GUADALUPE": "$420.032,00"
+        // --- DATA & CONFIG ---
+        
+        const subjectsConfig = {
+            'GEOGRAFÍA': { color: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-200', icon: 'fa-globe' },
+            'MATEMATICA': { color: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-200', icon: 'fa-calculator' },
+            'MATEMÁTICA': { color: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-200', icon: 'fa-calculator' },
+            'FOR DOC': { color: 'bg-purple-100', text: 'text-purple-800', border: 'border-purple-200', icon: 'fa-chalkboard-user' },
+            'TEATRO': { color: 'bg-pink-100', text: 'text-pink-800', border: 'border-pink-200', icon: 'fa-masks-theater' },
+            'BIOLOGÍA': { color: 'bg-green-100', text: 'text-green-800', border: 'border-green-200', icon: 'fa-dna' },
+            'PDL': { color: 'bg-cyan-100', text: 'text-cyan-800', border: 'border-cyan-200', icon: 'fa-book' },
+            'CONSTRUCCIÓN': { color: 'bg-orange-100', text: 'text-orange-800', border: 'border-orange-200', icon: 'fa-trowel-bricks' },
+            'HISTORIA': { color: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-200', icon: 'fa-landmark' },
+            'INGLÉS': { color: 'bg-indigo-100', text: 'text-indigo-800', border: 'border-indigo-200', icon: 'fa-language' },
+            'TUTORIA': { color: 'bg-slate-100', text: 'text-slate-800', border: 'border-slate-200', icon: 'fa-user-group' },
+            'FISÍCO QUÍMICA': { color: 'bg-teal-100', text: 'text-teal-800', border: 'border-teal-200', icon: 'fa-flask' },
+            'ED FÍSICA': { color: 'bg-red-100', text: 'text-red-800', border: 'border-red-200', icon: 'fa-person-running' },
+            'TECNOLOGIA': { color: 'bg-violet-100', text: 'text-violet-800', border: 'border-violet-200', icon: 'fa-microchip' },
+            'COMEDOR': { color: 'bg-yellow-50', text: 'text-yellow-800', border: 'border-yellow-200', icon: 'fa-utensils' }
         };
 
-        document.getElementById('playerSelect').addEventListener('change', function() {
-            const playerName = this.value;
-            const detailsContainer = document.getElementById('playerDetails');
-            const nameElement = document.getElementById('playerName');
-            const balanceElement = document.getElementById('playerBalance');
+        // Timetable Structure: Day Index (0=Mon, 4=Fri) -> Slot Index -> Subject Name
+        // Slots: 0: 7:40, 1: 8:40, 2: 9:55, 3: 11:05, 4: 12:05, 5: 13:15, 6: 14:30, 7: 14:00(PM), 8: 14:40(PM), 9: 15:30(PM), 10: 16:10(PM)
+        // Note: PM slots vary by day in the original table, simplifying to fixed slots for logic, filtering empty ones.
+        const timetable = [
+            ['GEOGRAFÍA', 'BIOLOGÍA', 'CONSTRUCCIÓN', 'HISTORIA', '', 'ED FÍSICA', '', '', '', '', ''], // Lunes
+            ['MATEMATICA', 'GEOGRAFÍA', 'FOR DOC', 'PDL', 'BIOLOGÍA', 'FISÍCO QUÍMICA', '', '', '', '', ''], // Martes
+            ['FOR DOC', 'MATEMÁTICA', 'PDL', 'INGLÉS', 'TUTORIA', 'COMEDOR', '', 'TECNOLOGIA', 'TECNOLOGIA', '', ''], // Miércoles
+            ['MATEMÁTICA', 'MATEMATICA', 'TEATRO', 'PDL', 'FISÍCO QUÍMICA', 'TUTORIA', 'TUTORIA', '', '', '', ''], // Jueves
+            ['TEATRO', 'PDL', 'CONSTRUCCIÓN', 'HISTORIA', 'INGLÉS', 'ED FÍSICA', '', '', '', '', ''] // Viernes
+        ];
+
+        const timeLabels = [
+            '07:40 - 08:40', '08:40 - 09:40', '09:55 - 10:55', '11:05 - 12:05', '12:05 - 13:05', 
+            '13:15 - 14:10', '14:30', '14:00 - 14:40', '14:40 - 15:20', '15:30 - 16:10', '16:10 - 16:50'
+        ];
+
+        let currentDate = new Date(2026, 0, 1); // Start Jan 2026
+        let currentView = 'month';
+        let events = []; // { id, date, type, title, subject, timeSlot, modality, topics, file }
+        let activeFilter = null;
+
+        // --- INITIALIZATION ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSubjectFilters();
+            populateSubjectDropdown();
+            renderCalendar();
             
-            if (playerName && playersData[playerName]) {
-                nameElement.textContent = playerName;
-                balanceElement.textContent = playersData[playerName];
-                detailsContainer.style.display = 'block';
-            } else {
-                detailsContainer.style.display = 'none';
-            }
+            // File input listener
+            document.getElementById('event-file').addEventListener('change', function() {
+                const fileName = this.files[0] ? this.files[0].name : '';
+                const display = document.getElementById('file-name-display');
+                if(fileName) {
+                    display.textContent = `Archivo seleccionado: ${fileName}`;
+                    display.classList.remove('hidden');
+                } else {
+                    display.classList.add('hidden');
+                }
+            });
         });
+
+        // --- CORE LOGIC ---
+
+        function switchView(view) {
+            currentView = view;
+            // Update buttons
+            ['day', 'week', 'month', 'list'].forEach(v => {
+                const btn = document.getElementById(`btn-${v}`);
+                if(v === view) {
+                    btn.classList.add('bg-white', 'shadow', 'text-indigo-600');
+                    btn.classList.remove('text-slate-600');
+                } else {
+                    btn.classList.remove('bg-white', 'shadow', 'text-indigo-600');
+                    btn.classList.add('text-slate-600');
+                }
+            });
+            renderCalendar();
+        }
+
+        function changeDate(direction) {
+            if (currentView === 'month') {
+                currentDate.setMonth(currentDate.getMonth() + direction);
+            } else if (currentView === 'week') {
+                currentDate.setDate(currentDate.getDate() + (direction * 7));
+            } else if (currentView === 'day') {
+                currentDate.setDate(currentDate.getDate() + direction);
+            } else if (currentView === 'list') {
+                currentDate.setMonth(currentDate.getMonth() + direction);
+            }
+            renderCalendar();
+        }
+
+        function goToToday() {
+            currentDate = new Date();
+            renderCalendar();
+        }
+
+        function renderSubjectFilters() {
+            const container = document.getElementById('subject-filters');
+            const uniqueSubjects = [...new Set(Object.keys(subjectsConfig))].sort();
+            
+            container.innerHTML = uniqueSubjects.map(sub => `
+                <div class="flex items-center gap-2 cursor-pointer hover:bg-slate-50 p-1 rounded" onclick="toggleSubjectFilter('${sub}')">
+                    <div class="w-3 h-3 rounded-full ${subjectsConfig[sub].color.replace('bg-', 'bg-opacity-100 bg-')} border border-black/10"></div>
+                    <span class="text-sm text-slate-600 truncate">${sub}</span>
+                </div>
+            `).join('');
+        }
+
+        function toggleSubjectFilter(subject) {
+            activeFilter = activeFilter === subject ? null : subject;
+            renderCalendar();
+            // Visual feedback on sidebar could be added here
+        }
+
+        function resetFilters() {
+            activeFilter = null;
+            renderCalendar();
+        }
+
+        function populateSubjectDropdown() {
+            const select = document.getElementById('event-subject');
+            const uniqueSubjects = [...new Set(Object.keys(subjectsConfig))].sort();
+            select.innerHTML = '<option value="">Seleccionar...</option>' + 
+                uniqueSubjects.map(sub => `<option value="${sub}">${sub}</option>`).join('');
+        }
+
+        function updateTimeSlots() {
+            const subject = document.getElementById('event-subject').value;
+            const timeSelect = document.getElementById('event-time');
+            timeSelect.innerHTML = '<option value="">Seleccionar...</option>';
+
+            if (!subject) return;
+
+            // Find which days/times this subject appears
+            const dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+            let options = [];
+
+            timetable.forEach((daySlots, dayIndex) => {
+                daySlots.forEach((slotSubject, slotIndex) => {
+                    if (slotSubject === subject) {
+                        options.push({
+                            label: `${dayNames[dayIndex]} - ${timeLabels[slotIndex]}`,
+                            value: `${dayIndex}-${slotIndex}`
+                        });
+                    }
+                });
+            });
+
+            if(options.length === 0) {
+                timeSelect.innerHTML = '<option disabled>No hay horarios para esta materia</option>';
+            } else {
+                options.forEach(opt => {
+                    const el = document.createElement('option');
+                    el.value = opt.value;
+                    el.textContent = opt.label;
+                    timeSelect.appendChild(el);
+                });
+            }
+        }
+
+        function toggleModality(show) {
+            document.getElementById('modality-group').style.display = show ? 'block' : 'none';
+        }
+
+        // --- RENDERING ---
+
+        function renderCalendar() {
+            const container = document.getElementById('calendar-content');
+            const dateDisplay = document.getElementById('current-date-display');
+            
+            const options = { year: 'numeric', month: 'long' };
+            if (currentView === 'day') options.day = 'numeric';
+            dateDisplay.textContent = currentDate.toLocaleDateString('es-ES', options).replace(/^\w/, c => c.toUpperCase());
+
+            if (currentView === 'month') renderMonthView(container);
+            else if (currentView === 'week') renderWeekView(container);
+            else if (currentView === 'day') renderDayView(container);
+            else if (currentView === 'list') renderListView(container);
+        }
+
+        function getEventsForDate(date) {
+            const dateStr = date.toISOString().split('T')[0];
+            let dayEvents = events.filter(e => e.date === dateStr);
+            if (activeFilter) {
+                dayEvents = dayEvents.filter(e => e.subject === activeFilter);
+            }
+            return dayEvents;
+        }
+
+        function renderMonthView(container) {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const firstDay = new Date(year, month, 1).getDay(); // 0 = Sun
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            // Adjust for Monday start (0=Mon, 6=Sun)
+            const startOffset = firstDay === 0 ? 6 : firstDay - 1;
+
+            let html = `
+                <div class="grid grid-cols-7 border-b border-slate-200 bg-slate-50">
+                    ${['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(d => 
+                        `<div class="py-2 text-center text-xs font-semibold text-slate-500 uppercase">${d}</div>`
+                    ).join('')}
+                </div>
+                <div class="grid grid-cols-7 auto-rows-fr bg-slate-200 gap-px border-b border-slate-200">
+            `;
+
+            // Empty cells for start offset
+            for (let i = 0; i < startOffset; i++) {
+                html += `<div class="bg-white min-h-[100px]"></div>`;
+            }
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const currentDayDate = new Date(year, month, d);
+                const dayEvents = getEventsForDate(currentDayDate);
+                const isToday = new Date().toDateString() === currentDayDate.toDateString();
+                
+                html += `
+                    <div class="bg-white min-h-[120px] p-2 hover:bg-slate-50 transition-colors relative group cursor-pointer" onclick="openModal('${currentDayDate.toISOString().split('T')[0]}')">
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="text-sm font-medium ${isToday ? 'bg-indigo-600 text-white w-6 h-6 flex items-center justify-center rounded-full' : 'text-slate-700'}">${d}</span>
+                            ${dayEvents.length > 0 ? `<span class="text-xs text-slate-400">${dayEvents.length}</span>` : ''}
+                        </div>
+                        <div class="space-y-1 overflow-y-auto max-h-[90px] no-print">
+                            ${dayEvents.slice(0, 3).map(e => {
+                                const config = subjectsConfig[e.subject] || { color: 'bg-gray-100', text: 'text-gray-800' };
+                                let icon = '';
+                                if(e.type === 'prueba') icon = '<i class="fa-solid fa-pen-to-square text-[10px]"></i>';
+                                if(e.type === 'tp') icon = '<i class="fa-solid fa-book-open text-[10px]"></i>';
+                                if(e.type === 'obligacion') icon = '<i class="fa-solid fa-clipboard-check text-[10px]"></i>';
+                                
+                                return `
+                                    <div class="text-[10px] px-1.5 py-0.5 rounded truncate ${config.color} ${config.text} border ${config.border} flex items-center gap-1">
+                                        ${icon} ${e.title}
+                                    </div>
+                                `;
+                            }).join('')}
+                            ${dayEvents.length > 3 ? `<div class="text-[10px] text-slate-400 pl-1">+${dayEvents.length - 3} más</div>` : ''}
+                        </div>
+                        <button class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 text-indigo-600 hover:text-indigo-800 no-print"><i class="fa-solid fa-plus-circle"></i></button>
+                    </div>
+                `;
+            }
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function renderWeekView(container) {
+            const startOfWeek = new Date(currentDate);
+            const day = startOfWeek.getDay() || 7; 
+            if(day !== 1) startOfWeek.setHours(-24 * (day - 1)); // Set to Monday
+
+            const weekDays = [];
+            for(let i=0; i<7; i++) {
+                const d = new Date(startOfWeek);
+                d.setDate(startOfWeek.getDate() + i);
+                weekDays.push(d);
+            }
+
+            let html = `
+                <div class="grid grid-cols-8 border-b border-slate-200 bg-slate-50 sticky top-0 z-10">
+                    <div class="p-2 text-xs font-semibold text-slate-500 border-r border-slate-200">Hora</div>
+                    ${weekDays.map(d => {
+                        const isToday = new Date().toDateString() === d.toDateString();
+                        return `
+                            <div class="p-2 text-center border-r border-slate-200 last:border-r-0">
+                                <div class="text-xs font-semibold text-slate-500 uppercase">${d.toLocaleDateString('es-ES', { weekday: 'short' })}</div>
+                                <div class="text-lg font-bold ${isToday ? 'text-indigo-600' : 'text-slate-800'}">${d.getDate()}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                <div class="flex flex-col">
+            `;
+
+            // Render time slots (Morning + Afternoon based on timetable)
+            const slotsToRender = [0, 1, 2, 3, 4, 5, 7, 8, 9, 10]; // Skip slot 6 (14:30) as it's usually short/variable, keep main blocks
+
+            slotsToRender.forEach(slotIdx => {
+                html += `
+                    <div class="grid grid-cols-8 border-b border-slate-100 min-h-[60px]">
+                        <div class="p-2 text-xs text-slate-400 border-r border-slate-200 bg-slate-50 flex flex-col justify-center">
+                            <span>${timeLabels[slotIdx].split(' - ')[0]}</span>
+                        </div>
+                        ${weekDays.map((dayDate, dayIdx) => {
+                            // dayIdx 0=Mon matches timetable index 0
+                            if(dayIdx > 4) return `<div class="border-r border-slate-100 bg-slate-50/50"></div>`; // Weekend
+
+                            const subject = timetable[dayIdx][slotIdx];
+                            const dayEvents = getEventsForDate(dayDate).filter(e => {
+                                // If event has specific time slot matching this cell
+                                if(e.timeSlot) {
+                                    const [eDay, eSlot] = e.timeSlot.split('-').map(Number);
+                                    return eDay === dayIdx && eSlot === slotIdx;
+                                }
+                                return false; 
+                            });
+
+                            let cellContent = '';
+                            if(subject) {
+                                const config = subjectsConfig[subject];
+                                cellContent = `
+                                    <div class="h-full w-full flex flex-col items-center justify-center p-1 text-center opacity-60 hover:opacity-100 transition-opacity">
+                                        <i class="fa-solid ${config.icon} ${config.text} text-lg mb-1"></i>
+                                        <span class="text-[10px] font-bold ${config.text}">${subject}</span>
+                                    </div>
+                                `;
+                            }
+
+                            let eventBadges = '';
+                            if(dayEvents.length > 0) {
+                                eventBadges = `<div class="absolute top-1 right-1 flex flex-col gap-1 items-end z-10">
+                                    ${dayEvents.map(e => {
+                                        let color = e.type === 'prueba' ? 'bg-red-500' : (e.type === 'tp' ? 'bg-blue-500' : 'bg-amber-500');
+                                        return `<div class="${color} text-white text-[9px] px-1.5 py-0.5 rounded shadow-sm whitespace-nowrap">${e.title}</div>`
+                                    }).join('')}
+                                </div>`;
+                            }
+
+                            return `
+                                <div class="border-r border-slate-100 relative hover:bg-slate-50 transition-colors cursor-pointer" onclick="openModal('${dayDate.toISOString().split('T')[0]}', ${dayIdx}, ${slotIdx})">
+                                    ${cellContent}
+                                    ${eventBadges}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function renderDayView(container) {
+            const dayIndex = currentDate.getDay() || 7; // 1-7
+            const isWeekend = dayIndex > 5;
+            const displayDayIndex = dayIndex - 1; // 0-4 for timetable
+
+            let html = `<div class="p-6 max-w-4xl mx-auto">`;
+            
+            if(isWeekend) {
+                html += `<div class="text-center py-10 text-slate-500">No hay clases los fines de semana.</div>`;
+            } else {
+                html += `<div class="space-y-4">`;
+                const daySchedule = timetable[displayDayIndex];
+                const dayEvents = getEventsForDate(currentDate);
+
+                daySchedule.forEach((subject, slotIdx) => {
+                    if(!subject) return;
+
+                    const config = subjectsConfig[subject];
+                    const relevantEvents = dayEvents.filter(e => {
+                         if(e.timeSlot) {
+                            const [eDay, eSlot] = e.timeSlot.split('-').map(Number);
+                            return eDay === displayDayIndex && eSlot === slotIdx;
+                        }
+                        return false;
+                    });
+
+                    html += `
+                        <div class="flex border border-slate-200 rounded-lg overflow-hidden shadow-sm bg-white">
+                            <div class="w-32 bg-slate-50 border-r border-slate-200 p-3 flex flex-col justify-center items-center text-center">
+                                <span class="text-xs font-bold text-slate-500 uppercase">Hora</span>
+                                <span class="text-sm font-medium text-slate-800">${timeLabels[slotIdx]}</span>
+                            </div>
+                            <div class="flex-1 p-4 relative">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-10 h-10 rounded-full ${config.color} ${config.text} flex items-center justify-center text-lg">
+                                        <i class="fa-solid ${config.icon}"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800">${subject}</h4>
+                                        <p class="text-xs text-slate-500">Clase Regular</p>
+                                    </div>
+                                </div>
+                                
+                                ${relevantEvents.length > 0 ? `
+                                    <div class="mt-3 pt-3 border-t border-slate-100 space-y-2">
+                                        ${relevantEvents.map(e => {
+                                            let typeColor = e.type === 'prueba' ? 'text-red-600 bg-red-50 border-red-200' : (e.type === 'tp' ? 'text-blue-600 bg-blue-50 border-blue-200' : 'text-amber-600 bg-amber-50 border-amber-200');
+                                            let typeIcon = e.type === 'prueba' ? 'fa-pen-to-square' : (e.type === 'tp' ? 'fa-book-open' : 'fa-clipboard-check');
+                                            
+                                            return `
+                                                <div class="flex items-start gap-3 p-3 rounded-lg border ${typeColor}">
+                                                    <i class="fa-solid ${typeIcon} mt-1"></i>
+                                                    <div class="flex-1">
+                                                        <div class="flex justify-between">
+                                                            <h5 class="font-bold text-sm">${e.title}</h5>
+                                                            ${e.modality ? `<span class="text-[10px] uppercase font-bold bg-white/50 px-1.5 rounded">${e.modality}</span>` : ''}
+                                                        </div>
+                                                        ${e.topics ? `<p class="text-xs mt-1 opacity-80">${e.topics}</p>` : ''}
+                                                        ${e.file ? `<p class="text-[10px] mt-1 flex items-center gap-1 opacity-70"><i class="fa-solid fa-paperclip"></i> ${e.file}</p>` : ''}
+                                                    </div>
+                                                </div>
+                                            `;
+                                        }).join('')}
+                                    </div>
+                                ` : ''}
+                                
+                                <button onclick="openModal('${currentDate.toISOString().split('T')[0]}', ${displayDayIndex}, ${slotIdx})" class="absolute top-4 right-4 text-slate-300 hover:text-indigo-600 no-print">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function renderListView(container) {
+            const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            
+            // Filter events for current month
+            let monthEvents = events.filter(e => {
+                const eDate = new Date(e.date);
+                return eDate >= monthStart && eDate <= monthEnd;
+            });
+
+            if(activeFilter) {
+                monthEvents = monthEvents.filter(e => e.subject === activeFilter);
+            }
+
+            // Sort by date
+            monthEvents.sort((a,b) => new Date(a.date) - new Date(b.date));
+
+            if(monthEvents.length === 0) {
+                container.innerHTML = `<div class="flex flex-col items-center justify-center h-64 text-slate-400"><i class="fa-regular fa-calendar-xmark text-4xl mb-3"></i><p>No hay actividades registradas este mes.</p></div>`;
+                return;
+            }
+
+            let html = `
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-semibold">
+                                <th class="p-4">Fecha</th>
+                                <th class="p-4">Tipo</th>
+                                <th class="p-4">Materia</th>
+                                <th class="p-4">Título</th>
+                                <th class="p-4">Detalles</th>
+                                <th class="p-4 text-right no-print">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+            `;
+
+            monthEvents.forEach(e => {
+                const dateObj = new Date(e.date);
+                const dateStr = dateObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+                
+                let typeBadge = '';
+                if(e.type === 'prueba') typeBadge = '<span class="px-2 py-1 rounded text-[10px] font-bold bg-red-100 text-red-700">PRUEBA</span>';
+                if(e.type === 'tp') typeBadge = '<span class="px-2 py-1 rounded text-[10px] font-bold bg-blue-100 text-blue-700">TP</span>';
+                if(e.type === 'obligacion') typeBadge = '<span class="px-2 py-1 rounded text-[10px] font-bold bg-amber-100 text-amber-700">OBLIGACIÓN</span>';
+
+                const config = subjectsConfig[e.subject] || { color: 'bg-gray-100', text: 'text-gray-800' };
+
+                html += `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="p-4 text-sm font-medium text-slate-700">${dateStr}</td>
+                        <td class="p-4">${typeBadge} ${e.modality ? `<span class="text-xs text-slate-500 ml-1">(${e.modality})</span>` : ''}</td>
+                        <td class="p-4">
+                            <span class="subject-badge ${config.color} ${config.text} border ${config.border}">
+                                <i class="fa-solid ${config.icon} mr-1.5"></i> ${e.subject}
+                            </span>
+                        </td>
+                        <td class="p-4 text-sm font-bold text-slate-800">${e.title}</td>
+                        <td class="p-4 text-sm text-slate-600 max-w-xs truncate" title="${e.topics}">${e.topics || '-'}</td>
+                        <td class="p-4 text-right no-print">
+                            <button onclick="deleteEvent('${e.id}')" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `</tbody></table></div>`;
+            container.innerHTML = html;
+        }
+
+        // --- MODAL & FORM HANDLING ---
+
+        function openModal(dateStr = null, dayIdx = null, slotIdx = null) {
+            const modal = document.getElementById('event-modal');
+            const form = document.getElementById('event-form');
+            
+            form.reset();
+            document.getElementById('file-name-display').classList.add('hidden');
+            
+            // Set Date
+            const targetDate = dateStr ? dateStr : currentDate.toISOString().split('T')[0];
+            document.getElementById('event-date').value = targetDate;
+
+            // Pre-select time if coming from week/day view
+            if(dayIdx !== null && slotIdx !== null) {
+                // We need to find a subject at this slot to pre-select it, or just leave subject empty
+                // For simplicity, we just open the modal. The user must select subject first.
+                // But we can store the intended slot in a data attribute if we wanted to auto-select.
+                // Let's just ensure the dropdowns are ready.
+                updateTimeSlots(); 
+            }
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            document.body.classList.add('modal-active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('event-modal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            document.body.classList.remove('modal-active');
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const newEvent = {
+                id: Date.now().toString(),
+                date: document.getElementById('event-date').value,
+                type: document.querySelector('input[name="type"]:checked').value,
+                title: document.getElementById('event-title').value,
+                subject: document.getElementById('event-subject').value,
+                timeSlot: document.getElementById('event-time').value,
+                modality: document.querySelector('input[name="modality"]:checked')?.value,
+                topics: document.getElementById('event-topics').value,
+                file: document.getElementById('event-file').files[0]?.name || null
+            };
+
+            events.push(newEvent);
+            closeModal();
+            renderCalendar();
+        }
+
+        function deleteEvent(id) {
+            if(confirm('¿Estás seguro de eliminar esta actividad?')) {
+                events = events.filter(e => e.id !== id);
+                renderCalendar();
+            }
+        }
+
     </script>
 </body>
 </html>
-```
+
+
